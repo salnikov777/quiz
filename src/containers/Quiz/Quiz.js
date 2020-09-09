@@ -5,6 +5,7 @@ import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 class Quiz extends Component {
   state = {
     activeQuestion: 0,
+    answerState: null, // {[id]: 'success' 'error'}
     quiz: [
       {
         question: 'Какого цвета небо?',
@@ -54,10 +55,34 @@ class Quiz extends Component {
   }
 
   onAnswerClickHandler = (answerId) => {
-    console.log('Answer ID:', answerId);
-    this.setState({
-      activeQuestion: this.state.activeQuestion + 1
-    });
+    const question = this.state.quiz[this.state.activeQuestion];
+    if(question.rightAnswerId === answerId){
+      this.setState({
+        answerState: {[answerId]: 'success'}
+      });
+
+      const timeout = setTimeout(()=>{
+        if(this.isQuizFinished()){
+          console.log('Finished');
+        }else{
+          this.setState({
+            activeQuestion: this.state.activeQuestion + 1,
+            answerState: null
+          });
+        }
+
+        clearTimeout(timeout)
+      }, 500);
+    }else{
+      this.setState({
+        answerState: {[answerId]: 'error'}
+      });
+    }
+
+  }
+
+  isQuizFinished(){
+    return this.state.activeQuestion + 1 === this.state.quiz.length
   }
 
   render() {
@@ -71,6 +96,7 @@ class Quiz extends Component {
             onAnswerClick={this.onAnswerClickHandler}
             quizLength={this.state.quiz.length}
             answerNumber={this.state.activeQuestion + 1}
+            state={this.state.answerState}
           />
         </div>
       </div>
