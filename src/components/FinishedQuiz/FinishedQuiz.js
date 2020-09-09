@@ -4,8 +4,8 @@ import Button from "../UI/Button/Button";
 
 const FinishedQuiz = (props) => {
   let successCount = 0;
-  props.quiz.forEach((el, idx)=>{
-   if(props.results[el.id] === 'success') successCount++
+  props.quiz.forEach((el, idx) => {
+    if (props.results[el.id] === 'success') successCount++
   });
   return (
     <div className={classes.FinishedQuiz}>
@@ -33,7 +33,7 @@ const FinishedQuiz = (props) => {
           onClick={props.onRetry}
           type="primary"
         >Повторить</Button>
-        <Button  type="success">Перейти в список тестов</Button>
+        <Button type="success">Перейти в список тестов</Button>
       </div>
     </div>
   )
