@@ -42,7 +42,9 @@ class QuizCreator extends Component {
   }
 
   createQuizHandler = (event) => {
-
+    event.preventDefault();
+    //TODO server
+    console.log(this.state.quiz);
   }
 
   changeHandler = (value, controlName) => {
@@ -85,12 +87,39 @@ class QuizCreator extends Component {
 
   selectChangeHandler = event => {
     this.setState({
-      rightAnswerId: + event.target.value
+      rightAnswerId: +event.target.value
     });
   }
 
   addQuestionHandler = (event) => {
     event.preventDefault();
+
+    const quiz = this.state.quiz.concat();
+    const index = quiz.length + 1;
+
+    const {question, option1, option2, option3, option4} = this.state.formControls;
+
+    const questionItem = {
+      question: question.value,
+      id: index,
+      rightAnswerId: this.state.rightAnswerId,
+      answers: [
+        {text: option1.value, id: option1.id},
+        {text: option2.value, id: option2.id},
+        {text: option3.value, id: option3.id},
+        {text: option4.value, id: option4.id},
+      ]
+    }
+    quiz.push(questionItem)
+
+    this.setState({
+      quiz,
+      isFormValid: false,
+      rightAnswerId: 1,
+      formControls: createFormsControls()
+
+    })
+
   }
 
   render() {
@@ -126,7 +155,7 @@ class QuizCreator extends Component {
             <Button
               type="success"
               onClick={this.createQuizHandler}
-              disabled={!this.state.quiz.length === 0}
+              disabled={this.state.quiz.length === 0}
             >
               Создать тест
             </Button>
